@@ -1,0 +1,29 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Amazon Elastic Container Registry (Amazon ECR) repository
+Parameters:
+    ECRName:
+        Type: String
+        Description: Only the Name. not the URL
+        Default: "web"
+    scanOnPushs:
+        Description: 'Enable AWS ECR scaning images.'
+        Type: String
+        Default: true
+        AllowedValues:
+        - true
+        - false
+    
+Resources:
+    ECR:
+        Type: AWS::ECR::Repository
+        Properties:
+          RepositoryName: !Ref ECRName 
+          ImageScanningConfiguration: !Ref scanOnPushs
+    
+Outputs:
+    ECRName:
+        Description: 'Use this ECR.'
+        Value: !GetAtt 'ECR.Arn'
+        Export:
+          Name: !Sub '${AWS::StackName}-ECRName'
+
